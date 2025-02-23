@@ -7,6 +7,7 @@
 /node_modules
 oclif.manifest.json
 
+mynewcli/
 package-lock.json
 pnpm-lock.yaml
 .pnp.*
@@ -16,6 +17,3 @@ pnpm-lock.yaml
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
-
-
-
