@@ -1,30 +1,30 @@
+import { exec as execSync } from "node:child_process";
+import * as fs from "node:fs";
+import path from "node:path";
+import { promisify } from "node:util";
 /* eslint-disable no-useless-escape */
-import {Interfaces} from '@oclif/core'
-import {exec as execSync} from 'node:child_process'
-import * as fs from 'node:fs'
-import path from 'node:path'
-import {promisify} from 'node:util'
+import type { Interfaces } from "@oclif/core";
 
-const exec = promisify(execSync)
+const exec = promisify(execSync);
 
 export async function writeBinScripts({
-  baseWorkspace,
-  config,
-  nodeOptions,
-  nodeVersion,
+	baseWorkspace,
+	config,
+	nodeOptions,
+	nodeVersion,
 }: {
-  baseWorkspace: string
-  config: Interfaces.Config
-  nodeOptions: string[]
-  nodeVersion: string
+	baseWorkspace: string;
+	config: Interfaces.Config;
+	nodeOptions: string[];
+	nodeVersion: string;
 }): Promise<void> {
-  const binPathEnvVar = config.scopedEnvVarKey('BINPATH')
-  const redirectedEnvVar = config.scopedEnvVarKey('REDIRECTED')
-  const clientHomeEnvVar = config.scopedEnvVarKey('OCLIF_CLIENT_HOME')
-  const writeWin32 = async (bin: string) => {
-    await fs.promises.writeFile(
-      path.join(baseWorkspace, 'bin', `${bin}.cmd`),
-      `@echo off
+	const binPathEnvVar = config.scopedEnvVarKey("BINPATH");
+	const redirectedEnvVar = config.scopedEnvVarKey("REDIRECTED");
+	const clientHomeEnvVar = config.scopedEnvVarKey("OCLIF_CLIENT_HOME");
+	const writeWin32 = async (bin: string) => {
+		await fs.promises.writeFile(
+			path.join(baseWorkspace, "bin", `${bin}.cmd`),
+			`@echo off
 setlocal enableextensions
 
 if not "%${redirectedEnvVar}%"=="1" if exist "%LOCALAPPDATA%\\${bin}\\client\\bin\\${bin}.cmd" (
@@ -36,21 +36,21 @@ if not "%${redirectedEnvVar}%"=="1" if exist "%LOCALAPPDATA%\\${bin}\\client\\bi
 if not defined ${binPathEnvVar} set ${binPathEnvVar}="%~dp0${bin}.cmd"
 
 if exist "%~dp0..\\bin\\node.exe" (
-  "%~dp0..\\bin\\node.exe" ${`${nodeOptions.join(' ')} `}"%~dp0..\\bin\\run" %*
+  "%~dp0..\\bin\\node.exe" ${`${nodeOptions.join(" ")} `}"%~dp0..\\bin\\run" %*
 ) else if exist "%LOCALAPPDATA%\\oclif\\node\\node-${nodeVersion}.exe" (
-  "%LOCALAPPDATA%\\oclif\\node\\node-${nodeVersion}.exe" ${`${nodeOptions.join(' ')} `}"%~dp0..\\bin\\run" %*
+  "%LOCALAPPDATA%\\oclif\\node\\node-${nodeVersion}.exe" ${`${nodeOptions.join(" ")} `}"%~dp0..\\bin\\run" %*
 ) else (
-  node ${`${nodeOptions.join(' ')} `}"%~dp0..\\bin\\run" %*
+  node ${`${nodeOptions.join(" ")} `}"%~dp0..\\bin\\run" %*
 )
 `,
-    )
-  }
+		);
+	};
 
-  const writeUnix = async () => {
-    const bin = path.join(baseWorkspace, 'bin', config.bin)
-    await fs.promises.writeFile(
-      bin,
-      `#!/usr/bin/env bash
+	const writeUnix = async () => {
+		const bin = path.join(baseWorkspace, "bin", config.bin);
+		await fs.promises.writeFile(
+			bin,
+			`#!/usr/bin/env bash
 set -e
 echoerr() { echo "$@" 1>&2; }
 
@@ -91,22 +91,24 @@ else
     exit 1
   fi
   if [ "\$DEBUG" == "*" ]; then
-    echoerr ${binPathEnvVar}="\$${binPathEnvVar}" "\$NODE" ${`${nodeOptions.join(' ')} `}"\$DIR/run" "\$@"
+    echoerr ${binPathEnvVar}="\$${binPathEnvVar}" "\$NODE" ${`${nodeOptions.join(" ")} `}"\$DIR/run" "\$@"
   fi
-  "\$NODE" ${`${nodeOptions.join(' ')} `}"\$DIR/run" "\$@"
+  "\$NODE" ${`${nodeOptions.join(" ")} `}"\$DIR/run" "\$@"
 fi
 `,
-      {mode: 0o755},
-    )
-  }
+			{ mode: 0o755 },
+		);
+	};
 
-  await Promise.all([
-    writeWin32(config.bin),
-    writeUnix(),
-    ...(config.binAliases?.map((alias) =>
-      process.platform === 'win32'
-        ? writeWin32(alias)
-        : exec(`ln -sf ${config.bin} ${alias}`, {cwd: path.join(baseWorkspace, 'bin')}),
-    ) ?? []),
-  ])
+	await Promise.all([
+		writeWin32(config.bin),
+		writeUnix(),
+		...(config.binAliases?.map((alias) =>
+			process.platform === "win32"
+				? writeWin32(alias)
+				: exec(`ln -sf ${config.bin} ${alias}`, {
+						cwd: path.join(baseWorkspace, "bin"),
+					}),
+		) ?? []),
+	]);
 }

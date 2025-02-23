@@ -1,143 +1,145 @@
 {
-  "name": "mynewcli",
-  "description": "A new CLI generated with oclif",
-  "version": "0.0.0",
-  "author": "David Pitoniak",
-  "license": "MIT",
-  "packageManager": "pnpm@10.4.1",
-  "engines": {
-    "node": ">=20"
-  },
-  "type": "module",
-  "files": [
-    "./bin",
-    "./dist",
-    "./oclif.manifest.json"
-  ],
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "main": "./dist/index.js"
-    }
-  },
-  "bin": {
-    "mynewcli": "./bin/run.js"
-  },
-  "scripts": {
-    "build": "shx rm -rf dist && tsc -b",
-    "lint": "biome check",
-    "lint:fix": "biome check --write",
-    "postpack": "shx rm -f oclif.manifest.json",
-    "posttest": "pnpm lint",
-    "prepack": "shx rm -rf ./dist/mynewcli-* && oclif manifest && oclif readme",
-    "test": "mocha --forbid-only \"test/**/*.test.ts\"",
-    "version": "oclif readme && git add README.md"
-  },
-  "dependencies": {
-    "@google-cloud/storage": "^7.15.2",
-    "@inquirer/confirm": "^3.1.22",
-    "@inquirer/input": "^2.2.4",
-    "@inquirer/select": "^2.5.0",
-    "@oclif/core": "^4",
-    "@oclif/plugin-help": "^6",
-    "@oclif/plugin-not-found": "^3.2.32",
-    "@oclif/plugin-plugins": "^5",
-    "@oclif/plugin-update": "^4.6.31",
-    "@oclif/plugin-warn-if-update-available": "^3.1.31",
-    "async-retry": "^1.3.3",
-    "chalk": "^4",
-    "change-case": "^4",
-    "debug": "^4.4.0",
-    "ejs": "^3.1.10",
-    "find-yarn-workspace-root": "^2.0.0",
-    "fs-extra": "^11.3.0",
-    "github-slugger": "^2",
-    "got": "^13",
-    "lodash": "^4.17.21",
-    "normalize-package-data": "^6",
-    "semver": "^7.7.0",
-    "sort-package-json": "^2.14.0",
-    "tiny-jsonc": "^1.0.1",
-    "tsx": "^4.19.3",
-    "validate-npm-package-name": "^5.0.1"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
-    "@eslint/compat": "^1",
-    "@oclif/plugin-legacy": "^2.0.19",
-    "@oclif/prettier-config": "^0.2.1",
-    "@oclif/test": "^4",
-    "@types/async-retry": "^1.4.5",
-    "@types/chai": "^4",
-    "@types/cli-progress": "^3.11.6",
-    "@types/debug": "^4.1.12",
-    "@types/ejs": "^3.1.5",
-    "@types/fs-extra": "^11.0.4",
-    "@types/lodash": "^4.17.14",
-    "@types/mocha": "^10",
-    "@types/node": "^18",
-    "@types/semver": "^7.5.8",
-    "@types/shelljs": "^0.8.11",
-    "@types/sinon": "^17.0.3",
-    "@types/validate-npm-package-name": "^4.0.2",
-    "chai": "^4",
-    "commitlint": "^19",
-    "eslint": "^9",
-    "eslint-config-oclif": "^6",
-    "eslint-config-prettier": "^10",
-    "eslint-plugin-perfectionist": "^4",
-    "husky": "^9.1.7",
-    "lint-staged": "^15",
-    "mocha": "^10",
-    "nyc": "^15.1.0",
-    "oclif": "^4.17.30",
-    "prettier": "^3.4.2",
-    "shelljs": "^0.8.5",
-    "shx": "^0.3.3",
-    "sinon": "^18.0.1",
-    "ts-node": "^10",
-    "typescript": "^5"
-  },
-  "oclif": {
-    "bin": "mynewcli",
-    "dirname": "mynewcli",
-    "commands": "./dist/commands",
-    "plugins": [
-      "@oclif/plugin-help",
-      "@oclif/plugin-plugins",
-      "@oclif/plugin-update"
-    ],
-    "topicSeparator": " ",
-    "topics": {
-      "hello": {
-        "description": "Say hello to the world and others"
-      }
-    },
-    "update": {
-      "s3": {
-        "host": "http://basecli.storage.googleapis.com",
-        "bucket": "basecli",
-        "templates": {
-          "target": {
-            "unversioned": "tarballs/<%- bin %>/<%- channel === 'stable' ? '' : 'channels/' + channel + '/' %><%- bin %>-<%- platform %>-<%- arch %><%- ext %>",
-            "versioned": "tarballs/<%- bin %>/<%- channel === 'stable' ? '' : 'channels/' + channel + '/' %><%- bin %>-v<%- version %>/<%- bin %>-v<%- version %>-<%- platform %>-<%- arch %><%- ext %>",
-            "manifest": "tarballs/<%- bin %>/<%- channel === 'stable' ? '' : 'channels/' + channel + '/' %><%- platform %>-<%- arch %>"
-          },
-          "vanilla": {
-            "unversioned": "tarballs/<%- bin %>/<%- channel === 'stable' ? '' : 'channels/' + channel + '/' %><%- bin %><%- ext %>",
-            "versioned": "tarballs/<%- bin %>/<%- channel === 'stable' ? '' : 'channels/' + channel + '/' %><%- bin %>-v<%- version %>/<%- bin %>-v<%- version %><%- ext %>",
-            "manifest": "tarballs/<%- bin %>/<%- channel === 'stable' ? '' : 'channels/' + channel + '/' %>version"
-          }
-        }
-      },
-      "node": {
-        "version": "20.18.1",
-        "targets": [
-          "darwin-x64",
-          "darwin-arm64",
-          "linux-x64"
-        ]
-      }
-    }
-  }
+	"name": "mynewcli",
+	"description": "An extension of oclif CLI adding GCS update support",
+	"version": "0.0.0",
+	"author": "David Pitoniak",
+	"license": "MIT",
+	"packageManager": "yarn@1.22.22",
+	"engines": {
+		"node": ">=20"
+	},
+	"type": "module",
+	"files": [
+		"./bin",
+		"./dist",
+		"./oclif.manifest.json"
+	],
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"main": "./dist/index.js"
+		}
+	},
+	"bin": {
+		"mynewcli": "./bin/run.js"
+	},
+	"scripts": {
+		"build": "shx rm -rf dist && tsc -b",
+		"lint": "biome check",
+		"lint:fix": "biome check --write",
+		"postpack": "shx rm -f oclif.manifest.json",
+		"posttest": "pnpm lint",
+		"prepack": "shx rm -rf ./dist/mynewcli-* && oclif manifest && oclif readme",
+		"test": "mocha --forbid-only \"test/**/*.test.ts\"",
+		"version": "oclif readme && git add README.md",
+		"prep": "./bin/dev.js pack tarballs --parallel --targets=linux-x64",
+		"upload": "./bin/dev.js upload tarballs --targets=linux-x64"
+	},
+	"dependencies": {
+		"@google-cloud/storage": "^7.15.2",
+		"@inquirer/confirm": "^3.1.22",
+		"@inquirer/input": "^2.2.4",
+		"@inquirer/select": "^2.5.0",
+		"@oclif/core": "^4",
+		"@oclif/plugin-help": "^6",
+		"@oclif/plugin-not-found": "^3.2.32",
+		"@oclif/plugin-plugins": "^5",
+		"@oclif/plugin-update": "^4.6.31",
+		"@oclif/plugin-warn-if-update-available": "^3.1.31",
+		"async-retry": "^1.3.3",
+		"chalk": "^4",
+		"change-case": "^4",
+		"debug": "^4.4.0",
+		"ejs": "^3.1.10",
+		"find-yarn-workspace-root": "^2.0.0",
+		"fs-extra": "^11.3.0",
+		"github-slugger": "^2",
+		"got": "^13",
+		"lodash": "^4.17.21",
+		"normalize-package-data": "^6",
+		"semver": "^7.7.0",
+		"sort-package-json": "^2.14.0",
+		"tiny-jsonc": "^1.0.1",
+		"tsx": "^4.19.3",
+		"validate-npm-package-name": "^5.0.1"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^1.9.4",
+		"@eslint/compat": "^1",
+		"@oclif/plugin-legacy": "^2.0.19",
+		"@oclif/prettier-config": "^0.2.1",
+		"@oclif/test": "^4",
+		"@types/async-retry": "^1.4.5",
+		"@types/chai": "^4",
+		"@types/cli-progress": "^3.11.6",
+		"@types/debug": "^4.1.12",
+		"@types/ejs": "^3.1.5",
+		"@types/fs-extra": "^11.0.4",
+		"@types/lodash": "^4.17.14",
+		"@types/mocha": "^10",
+		"@types/node": "^18",
+		"@types/semver": "^7.5.8",
+		"@types/shelljs": "^0.8.11",
+		"@types/sinon": "^17.0.3",
+		"@types/validate-npm-package-name": "^4.0.2",
+		"chai": "^4",
+		"commitlint": "^19",
+		"eslint": "^9",
+		"eslint-config-oclif": "^6",
+		"eslint-config-prettier": "^10",
+		"eslint-plugin-perfectionist": "^4",
+		"husky": "^9.1.7",
+		"lint-staged": "^15",
+		"mocha": "^10",
+		"nyc": "^15.1.0",
+		"oclif": "^4.17.30",
+		"prettier": "^3.4.2",
+		"shelljs": "^0.8.5",
+		"shx": "^0.3.3",
+		"sinon": "^18.0.1",
+		"ts-node": "^10",
+		"typescript": "^5"
+	},
+	"oclif": {
+		"bin": "mynewcli",
+		"dirname": "mynewcli",
+		"commands": "./dist/commands",
+		"plugins": [
+			"@oclif/plugin-help",
+			"@oclif/plugin-plugins",
+			"@oclif/plugin-update"
+		],
+		"topicSeparator": " ",
+		"topics": {
+			"hello": {
+				"description": "Say hello to the world and others"
+			}
+		},
+		"update": {
+			"s3": {
+				"host": "http://basecli.storage.googleapis.com",
+				"bucket": "basecli",
+				"templates": {
+					"target": {
+						"unversioned": "tarballs/<%- bin %>/<%- channel === 'stable' ? '' : 'channels/' + channel + '/' %><%- bin %>-<%- platform %>-<%- arch %><%- ext %>",
+						"versioned": "tarballs/<%- bin %>/<%- channel === 'stable' ? '' : 'channels/' + channel + '/' %><%- bin %>-v<%- version %>/<%- bin %>-v<%- version %>-<%- platform %>-<%- arch %><%- ext %>",
+						"manifest": "tarballs/<%- bin %>/<%- channel === 'stable' ? '' : 'channels/' + channel + '/' %><%- platform %>-<%- arch %>"
+					},
+					"vanilla": {
+						"unversioned": "tarballs/<%- bin %>/<%- channel === 'stable' ? '' : 'channels/' + channel + '/' %><%- bin %><%- ext %>",
+						"versioned": "tarballs/<%- bin %>/<%- channel === 'stable' ? '' : 'channels/' + channel + '/' %><%- bin %>-v<%- version %>/<%- bin %>-v<%- version %><%- ext %>",
+						"manifest": "tarballs/<%- bin %>/<%- channel === 'stable' ? '' : 'channels/' + channel + '/' %>version"
+					}
+				}
+			},
+			"node": {
+				"version": "20.18.1",
+				"targets": [
+					"darwin-x64",
+					"darwin-arm64",
+					"linux-x64"
+				]
+			}
+		}
+	}
 }
