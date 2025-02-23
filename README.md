@@ -42,6 +42,7 @@ USAGE
 * [`mynewcli plugins uninstall [PLUGIN]`](#mynewcli-plugins-uninstall-plugin)
 * [`mynewcli plugins unlink [PLUGIN]`](#mynewcli-plugins-unlink-plugin)
 * [`mynewcli plugins update`](#mynewcli-plugins-update)
+* [`mynewcli update [CHANNEL]`](#mynewcli-update-channel)
 
 ## `mynewcli hello PERSON`
 
@@ -394,4 +395,42 @@ DESCRIPTION
 ```
 
 _See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.33/src/commands/plugins/update.ts)_
+
+## `mynewcli update [CHANNEL]`
+
+update the mynewcli CLI
+
+```
+USAGE
+  $ mynewcli update [CHANNEL] [--force |  | [-a | -v <value> | -i]] [-b ]
+
+FLAGS
+  -a, --available        See available versions.
+  -b, --verbose          Show more details about the available versions.
+  -i, --interactive      Interactively select version to install. This is ignored if a channel is provided.
+  -v, --version=<value>  Install a specific version.
+      --force            Force a re-download of the requested version.
+
+DESCRIPTION
+  update the mynewcli CLI
+
+EXAMPLES
+  Update to the stable channel:
+
+    $ mynewcli update stable
+
+  Update to a specific version:
+
+    $ mynewcli update --version 1.0.0
+
+  Interactively select version:
+
+    $ mynewcli update --interactive
+
+  See available versions:
+
+    $ mynewcli update --available
+```
+
+_See code: [@oclif/plugin-update](https://github.com/oclif/plugin-update/blob/v4.6.31/src/commands/update.ts)_
 <!-- commandsstop -->
